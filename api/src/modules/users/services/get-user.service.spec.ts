@@ -1,8 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
+import { makeUser } from '@/test/factories/make-user';
 import { InMemoryUserRepository } from '@/test/repositories/in-memory-user.repository';
-
-import { User } from '../entities/user.entity';
 
 import { GetUserService } from './get-user.service';
 
@@ -16,33 +15,21 @@ describe('GetUserService', () => {
   });
 
   it('should get user profile', async () => {
-    await userRepo.create(
-      new User({
-        id: 'valid-user-id',
-        name: 'John Doe',
-        email: 'john@mail.com',
-        password: 'strong123',
-      }),
-    );
+    const user = makeUser({ name: 'John Doe', email: 'john@mail.com' });
+    await userRepo.create(user);
 
-    const output = await sut.execute('valid-user-id');
+    const output = await sut.execute(user.id);
 
-    expect(output.id).toEqual('valid-user-id');
+    expect(output.id).toEqual(user.id);
     expect(output.name).toEqual('John Doe');
     expect(output.email).toEqual('john@mail.com');
   });
 
   it('should not return the user password', async () => {
-    await userRepo.create(
-      new User({
-        id: 'valid-user-id',
-        name: 'John Doe',
-        email: 'john@mail.com',
-        password: 'strong123',
-      }),
-    );
+    const user = makeUser({ name: 'John Doe', email: 'john@mail.com' });
+    await userRepo.create(user);
 
-    const output = await sut.execute('valid-user-id');
+    const output = await sut.execute(user.id);
 
     expect(output).not.toHaveProperty('password');
   });

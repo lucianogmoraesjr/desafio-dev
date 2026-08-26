@@ -1,5 +1,6 @@
 import { ConflictException } from '@nestjs/common';
 
+import { makeUser } from '@/test/factories/make-user';
 import { FakeHashProvider } from '@/test/providers/fake-hash.provider';
 import { InMemoryUserRepository } from '@/test/repositories/in-memory-user.repository';
 
@@ -41,13 +42,7 @@ describe('SignupService', () => {
   });
 
   it('should throw ConflictException if email already exist', async () => {
-    await userRepo.create({
-      id: 'some-id',
-      name: 'John Doe',
-      email: 'john@mail.com',
-      password: 'some-password',
-      createdAt: new Date(),
-    });
+    await userRepo.create(makeUser({ email: 'john@mail.com' }));
 
     const user = {
       name: 'John Smith',

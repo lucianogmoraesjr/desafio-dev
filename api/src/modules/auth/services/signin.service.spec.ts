@@ -1,7 +1,7 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { User } from '@/modules/users/entities/user.entity';
+import { makeUser } from '@/test/factories/make-user';
 import { FakeHashProvider } from '@/test/providers/fake-hash.provider';
 import { InMemoryUserRepository } from '@/test/repositories/in-memory-user.repository';
 
@@ -23,13 +23,11 @@ describe('SigninService', () => {
     sut = new SigninService(userRepo, hashProvider, jwtService);
   });
 
-  it('should create a new user', async () => {
-    const password = 'valid_password';
-    const hashed = await hashProvider.generateHash(password);
-    const user = new User({
+  it('should authenticate a user', async () => {
+    const user = makeUser({
       name: 'John Doe',
       email: 'john@mail.com',
-      password: hashed,
+      password: await hashProvider.generateHash('valid_password'),
     });
 
     await userRepo.create(user);
@@ -54,14 +52,11 @@ describe('SigninService', () => {
   });
 
   it('should throw UnauthorizedException if password does not match', async () => {
-    const password = 'valid_password';
-    const hashed = await hashProvider.generateHash(password);
-
     await userRepo.create(
-      new User({
+      makeUser({
         name: 'John Doe',
         email: 'john@mail.com',
-        password: hashed,
+        password: await hashProvider.generateHash('valid_password'),
       }),
     );
 
