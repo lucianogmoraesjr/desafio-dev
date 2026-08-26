@@ -1,8 +1,14 @@
-import { User } from '../../src/modules/users/entities/user.entity';
-import { UserRepository } from '../../src/modules/users/repositories/user.repository';
+import { User } from '@/generated/prisma/client';
+import { UserRepository } from '@/modules/users/repositories/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   public users: User[] = [];
+
+  findById(id: string): Promise<User | null> {
+    const user = this.users.find((u) => u.id === id);
+    if (!user) return Promise.resolve(null);
+    return Promise.resolve(user);
+  }
 
   findByEmail(email: string): Promise<User | null> {
     const user = this.users.find((u) => u.email === email);

@@ -1,12 +1,27 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+
+import { DatabaseModule } from '@/database/database.module';
+import { env } from '@/shared/config/env';
+import { ProvidersModule } from '@/shared/providers/providers.module';
+
 import { AuthController } from './auth.controller';
+import { SigninService } from './services/signin.service';
 import { SignupService } from './services/signup.service';
-import { DatabaseModule } from 'src/database/database.module';
-import { ProvidersModule } from 'src/shared/providers/providers.module';
 
 @Module({
-  imports: [DatabaseModule, ProvidersModule],
+  imports: [
+    DatabaseModule,
+    ProvidersModule,
+    JwtModule.register({
+      global: true,
+      secret: env.jwtSecret,
+      signOptions: {
+        expiresIn: '1d',
+      },
+    }),
+  ],
   controllers: [AuthController],
-  providers: [SignupService],
+  providers: [SignupService, SigninService],
 })
 export class AuthModule {}

@@ -1,7 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 
-import { FakeHashProvider } from '../../../../test/providers/fake-hash.provider';
-import { InMemoryUserRepository } from '../../../../test/repositories/in-memory-user.repository';
+import { FakeHashProvider } from '@/test/providers/fake-hash.provider';
+import { InMemoryUserRepository } from '@/test/repositories/in-memory-user.repository';
+
 import { SignupService } from './signup.service';
 
 let userRepo: InMemoryUserRepository;
@@ -39,7 +40,7 @@ describe('SignupService', () => {
     expect(userRepo.users[0].password).toBe(hashedPassword);
   });
 
-  it('should not create a user with existing email', async () => {
+  it('should throw ConflictException if email already exist', async () => {
     await userRepo.create({
       id: 'some-id',
       name: 'John Doe',
@@ -54,6 +55,6 @@ describe('SignupService', () => {
       password: '123123123',
     };
 
-    void expect(sut.execute(user)).rejects.toThrow(ConflictException);
+    await expect(sut.execute(user)).rejects.toThrow(ConflictException);
   });
 });

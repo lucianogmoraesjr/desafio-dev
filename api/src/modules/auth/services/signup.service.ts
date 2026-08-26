@@ -1,8 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
-import { HashProvider } from '../../../shared/providers/hash/hash.provider';
-import { UserRepository } from '../../users/repositories/user.repository';
-import { User } from '../../users/entities/user.entity';
+import { User } from '@/modules/users/entities/user.entity';
+import { UserRepository } from '@/modules/users/repositories/user.repository';
+import { HashProvider } from '@/shared/providers/hash/hash.provider';
+
 import { SignupDto } from '../dtos/signup.dto';
 
 type Output = {
