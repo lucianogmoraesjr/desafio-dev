@@ -10,4 +10,6 @@
  */
 export type * from './models/User'
 export type * from './models/Category'
+export type * from './models/BankAccount'
+export type * from './models/Transaction'
 export type * from './commonInputTypes'

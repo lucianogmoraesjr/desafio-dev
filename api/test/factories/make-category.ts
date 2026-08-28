@@ -4,8 +4,9 @@ import {
   Attributes,
   Category,
 } from '@/modules/categories/entities/category.entity';
+import { TransactionType } from '@/modules/transactions/entities/transaction.entity';
 
-const categories = [
+export const categories = [
   'Alimentação',
   'Moradia',
   'Transporte',
@@ -19,6 +20,7 @@ export function makeCategory(override: Partial<Attributes> = {}) {
   return new Category({
     name: faker.helpers.arrayElement(categories),
     userId: faker.string.uuid({ version: 4 }),
+    type: faker.helpers.enumValue(TransactionType),
     ...override,
   });
 }

@@ -1,5 +1,6 @@
 import { ConflictException } from '@nestjs/common';
 
+import { TransactionType } from '@/modules/transactions/entities/transaction.entity';
 import { makeCategory } from '@/test/factories/make-category';
 import { InMemoryCategoryRepository } from '@/test/repositories/in-memory-category.repository';
 
@@ -18,6 +19,7 @@ describe('CreateCategoryService', () => {
     const output = await sut.execute({
       name: 'Alimentação',
       userId: 'user-123',
+      type: TransactionType.EXPENSE,
     });
 
     expect(output.id).toBeTruthy();
@@ -38,6 +40,7 @@ describe('CreateCategoryService', () => {
       sut.execute({
         name: 'Salário',
         userId: 'user-123',
+        type: TransactionType.INCOME,
       }),
     ).rejects.toThrow(ConflictException);
   });
@@ -53,6 +56,7 @@ describe('CreateCategoryService', () => {
     const output = await sut.execute({
       name: 'Salário',
       userId: 'user-456',
+      type: TransactionType.INCOME,
     });
 
     expect(output.id).toBeTruthy();

@@ -5,12 +5,14 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { ActiveUserId } from '@/shared/decorators/active-user-id.decorator';
 
 import { CreateCategoryDto } from './dtos/create-category.dto';
+import { ListCategoriesQueryDto } from './dtos/list-categories-query.dto';
 import { CreateCategoryService } from './services/create-category.service';
 import { ListCategoriesService } from './services/list-categories.service';
 
@@ -32,7 +34,10 @@ export class CategoriesController {
   }
 
   @Get()
-  async findAll(@ActiveUserId() userId: string) {
-    return this.listCategoriesService.execute(userId);
+  async findAll(
+    @ActiveUserId() userId: string,
+    @Query() query: ListCategoriesQueryDto,
+  ) {
+    return this.listCategoriesService.execute(userId, query.type);
   }
 }

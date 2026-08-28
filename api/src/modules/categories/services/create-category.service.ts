@@ -16,7 +16,7 @@ type Output = {
 export class CreateCategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute({ name, userId }: Input): Promise<Output> {
+  async execute({ name, userId, type }: Input): Promise<Output> {
     const categoryExists = await this.categoryRepository.findByNameAndUser(
       name,
       userId,
@@ -29,6 +29,7 @@ export class CreateCategoryService {
     const category = new Category({
       userId,
       name,
+      type,
     });
 
     await this.categoryRepository.create(category);
