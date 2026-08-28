@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: psa_finance_db
+    environment:
+      - "POSTGRES_USER=root"
+      - "POSTGRES_PASSWORD=root"
+      - "POSTGRES_DB=psa_finance"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d psa_finance"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: psa_finance_api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - "DATABASE_URL=postgresql://root:root@db:5432/psa_finance?schema=public"
+      - "JWT_SECRET=super_secret_jwt_key_change_me"
+      - "PORT=3001"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    container_name: psa_finance_ui
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - "NEXT_PUBLIC_API_URL=http://api:3001"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
