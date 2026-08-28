@@ -4,11 +4,10 @@ import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from '@/modules/users/repositories/user.repository';
 import { HashProvider } from '@/shared/providers/hash/hash.provider';
 
+import { SigninResponseDto } from '../dtos/signin-response.dto';
 import { SigninDto } from '../dtos/signin.dto';
 
-type Output = {
-  accessToken: string;
-};
+type Output = SigninResponseDto;
 
 @Injectable()
 export class SigninService {

@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
+import { CreateCategoryResponseDto } from '../dtos/create-category-response.dto';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { Category } from '../entities/category.entity';
 import { CategoryRepository } from '../repositories/category.repository';
@@ -8,9 +9,7 @@ type Input = CreateCategoryDto & {
   userId: string;
 };
 
-type Output = {
-  id: string;
-};
+type Output = CreateCategoryResponseDto;
 
 @Injectable()
 export class CreateCategoryService {
