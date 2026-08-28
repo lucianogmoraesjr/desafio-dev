@@ -1,6 +1,11 @@
-# 💰 psa.finance - Desafio Técnico
+# 💰 psa.finance - Desafio Técnico Fullstack
 
-Uma aplicação completa (Fullstack) para gestão financeira pessoal. Permite aos usuários o controle de suas contas bancárias, categorização de despesas e receitas, e o acompanhamento do saldo em tempo real.
+Uma aplicação completa para gestão financeira pessoal. Permite aos usuários o controle de suas contas bancárias, categorização de receitas e despesas, e o acompanhamento do saldo em tempo real.
+
+🌐 **Acesse a aplicação em produção:**
+
+- **Frontend (UI):** [https://desafio-dev-psa.vercel.app/](https://desafio-dev-psa.vercel.app/)
+- **Documentação da API (Scalar):** [https://desafio-dev-production.up.railway.app/docs](https://desafio-dev-production.up.railway.app/docs)
 
 ---
 
@@ -8,70 +13,68 @@ Uma aplicação completa (Fullstack) para gestão financeira pessoal. Permite ao
 
 **Backend (`/api`)**
 
-- [NestJS](https://nestjs.com/) (Framework Node.js)
+- [NestJS](https://nestjs.com/) (Framework Node.js com arquitetura modular)
 - [Fastify](https://fastify.dev/) (Motor HTTP de alta performance)
-- [Prisma ORM](https://www.prisma.io/) (Modelagem de dados e Migrations)
-- [PostgreSQL](https://www.postgresql.org/) (Banco de Dados Relacional)
-- [Swagger / Scalar](https://scalar.com/) (Documentação interativa da API)
+- [Prisma ORM](https://www.prisma.io/) & PostgreSQL (Modelagem e persistência de dados)
+- [Swagger / Scalar](https://scalar.com/) (Documentação interativa da API baseada em OpenAPI)
 
 **Frontend (`/ui`)**
 
-- [Next.js](https://nextjs.org/) (React Framework)
-- [Tailwind CSS](https://tailwindcss.com/) (Estilização utilitária)
-- Integração via API REST
+- [Next.js](https://nextjs.org/) (React Framework moderno)
+- [Tailwind CSS](https://tailwindcss.com/) (Estilização baseada em utilitários)
 
 ---
 
-## ⚙️ Como executar o projeto
+## ⚙️ Como executar o projeto localmente
 
-Pensando em facilitar a avaliação, o projeto foi totalmente containerizado. Você não precisa instalar Node.js ou configurar bancos de dados localmente.
+Pensando na Experiência do Desenvolvedor (DX) e para facilitar a avaliação, o projeto é totalmente containerizado. Você não precisa instalar Node.js ou configurar bancos de dados manualmente na sua máquina.
 
 ### Pré-requisitos
 
-- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados.
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) (ou Podman) instalados.
 
 ### Passo a passo
 
 1. Clone o repositório:
-   \`\`\`bash
-   git clone https://github.com/seu-usuario/desafio-dev.git
+
+```bash
+   git clone https://github.com/lucianogmoraesjr/desafio-dev.git
    cd desafio-dev
-   \`\`\`
+
+```
 
 2. Suba toda a infraestrutura (Banco de Dados, Backend e Frontend) com um único comando:
-   \`\`\`bash
-   docker-compose up -d --build
-   \`\`\`
 
-3. Acesse a aplicação:
-   - **Frontend (UI):** [http://localhost:3000](http://localhost:3000)
-   - **Documentação da API:** [http://localhost:3001/docs](http://localhost:3001/docs)
+```bash
+   docker compose up -d --build
 
-> **Nota:** As migrações do banco de dados são executadas automaticamente durante a inicialização do container da API.
+```
+
+3. Acesse localmente:
+
+- **Aplicação Web:** [http://localhost:3000](http://localhost:3000)
+- **Swagger / Docs:** [http://localhost:3001/docs](http://localhost:3001/docs)
 
 ---
+
 
 ## 📖 Documentação da API
 
-A documentação completa dos endpoints, regras de negócio e payloads (DTOs) foi construída utilizando o Scalar (uma interface mais moderna para o padrão OpenAPI/Swagger).
+A documentação interativa detalha todos os contratos de endpoints, DTOs e códigos de resposta HTTP.
 
-Para testar a API diretamente pela documentação:
+Se estiver testando pelo ambiente local ou em produção (`/docs`), o fluxo para rotas privadas é:
 
-1. Acesse `http://localhost:3001/docs`.
-2. Utilize o endpoint `POST /auth/signup` para criar um usuário.
-3. Utilize o endpoint `POST /auth/signin` para obter o Token JWT.
-4. Clique no botão de **Autenticação** no painel e insira o Token para desbloquear as rotas privadas.
+1. Cadastre uma conta em `POST /auth/signup` (ou utilize o usuário de testes).
+2. Autentique-se em `POST /auth/signin` para obter o `accessToken`.
+3. Insira o token no botão de **Authorize** da interface para desbloquear as rotas privadas.
 
 ---
 
-## 🏛️ Estrutura do Projeto e Decisões Arquiteturais
+## 🏛️ Decisões Arquiteturais e Boas Práticas
 
-O projeto adota princípios de separação de responsabilidades e injeção de dependências para garantir uma base de código escalável e testável.
-
-- **`/api/src/modules`**: Divisão por domínio (Auth, Users, BankAccounts, Categories, Transactions).
-- **`/api/src/shared`**: Decorators, providers e lógicas compartilhadas globalmente.
-- **Validação**: Uso intensivo de `class-validator` e `class-transformer` nos DTOs para blindar a aplicação de entradas inválidas.
-- **Respostas HTTP**: Padronização dos retornos e dos HTTP Status Codes (200, 201, 204, 400, 401, 404, 409).
+- **Separação de Domínios:** O backend segue uma estrutura modular rígida (`auth`, `users`, `bank-accounts`, `categories`, `transactions`), isolando regras de negócio e serviços.
+- **Validação de Entradas:** Uso intensivo de `class-validator` e `class-transformer` nos DTOs para blindar a API contra payloads malformados.
+- **Containerização Eficiente:** Dockerfiles otimizados com _Multi-stage builds_ e Alpine Linux para manter as imagens leves e seguras.
 
 ---
 
