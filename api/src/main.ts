@@ -58,6 +58,7 @@ async function bootstrap() {
     apiReference({
       content: swaggerDocument,
       setPageTitle: () => 'psa.finance - API Reference',
+      localization: { locale: 'pt-BR' },
       withFastify: true,
     }),
   );
