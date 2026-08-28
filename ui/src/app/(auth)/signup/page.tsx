@@ -1,8 +1,9 @@
 "use client";
 
-import { SignupForm } from "@/components/signup-form";
 import { Wallet } from "lucide-react";
 import Link from "next/link";
+
+import { SignupForm } from "@/components/signup-form";
 
 export default function SignupPage() {
   return (
