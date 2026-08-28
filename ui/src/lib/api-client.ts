@@ -15,12 +15,48 @@ export class ApiError extends Error {
   }
 }
 
+async function fetchClient<T>(
+  endpoint: string,
+  options: RequestInit,
+): Promise<T> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const response = await fetch(`${baseUrl}${endpoint}`, options);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    const errorMessage = Array.isArray(errorData?.message)
+      ? errorData.message[0]
+      : (errorData?.message ?? "Ocorreu um erro inesperado na requisição.");
+
+    throw new ApiError(errorMessage, response.status);
+  }
+
+  if (response.status === 204) return {} as T;
+  return response.json();
+}
+
+export async function publicApiClient<T>(
+  endpoint: string,
+  { body, ...customConfig }: ApiClientOptions = {},
+): Promise<T> {
+  const headers = new Headers(customConfig.headers);
+  if (!headers.has("Content-Type") && body)
+    headers.set("Content-Type", "application/json");
+
+  const config: RequestInit = {
+    ...customConfig,
+    headers,
+    ...(body ? { body: JSON.stringify(body) } : {}),
+  };
+
+  return fetchClient<T>(endpoint, config);
+}
+
 export async function apiClient<T>(
   endpoint: string,
   { body, ...customConfig }: ApiClientOptions = {},
 ): Promise<T> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-
   const headers = new Headers(customConfig.headers);
 
   if (!headers.has("Content-Type") && body) {
@@ -30,9 +66,7 @@ export async function apiClient<T>(
   const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
+  if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const config: RequestInit = {
     ...customConfig,
@@ -40,23 +74,12 @@ export async function apiClient<T>(
     ...(body ? { body: JSON.stringify(body) } : {}),
   };
 
-  const response = await fetch(`${baseUrl}${endpoint}`, config);
-
-  if (!response.ok) {
-    if (response.status === 401) {
+  try {
+    return await fetchClient<T>(endpoint, config);
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 401) {
       redirect("/api/signout");
     }
-
-    const errorData = await response.json().catch(() => null);
-    throw new ApiError(
-      errorData?.message ?? "Ocorreu um erro inesperado na requisição.",
-      response.status,
-    );
+    throw error;
   }
-
-  if (response.status === 204) {
-    return {} as T;
-  }
-
-  return response.json();
 }

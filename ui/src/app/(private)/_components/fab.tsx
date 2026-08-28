@@ -12,11 +12,14 @@ import { NewTransactionDialog } from "./dialogs/new-transaction-dialog";
 import { useState } from "react";
 import { BankAccountIcon } from "./icons/BankAccountIcon";
 import { CategoryIcon } from "./icons/categories/CategoryIcon";
+import { useBankAccounts } from "@/hooks/use-bank-accounts";
 
 export function Fab() {
   const [type, setType] = useState<"income" | "expense">("income");
   const [accountDialogOpen, setAccountDialogOpen] = useState(false);
   const [transactionDialogOpen, setTransactionDialogOpen] = useState(false);
+
+  const { accounts } = useBankAccounts();
 
   const handleOpenNewTransactionDialog = (type: "income" | "expense") => {
     setType(type);
@@ -43,6 +46,7 @@ export function Fab() {
             <DropdownMenuItem
               className="gap-3 items-center p-3"
               onClick={() => handleOpenNewTransactionDialog("income")}
+              disabled={accounts.length === 0}
             >
               <CategoryIcon type="income" className="size-8" />
               Nova Receita
@@ -50,6 +54,7 @@ export function Fab() {
             <DropdownMenuItem
               className="gap-3 items-center p-3"
               onClick={() => handleOpenNewTransactionDialog("expense")}
+              disabled={accounts.length === 0}
             >
               <CategoryIcon type="expense" className="size-8" />
               Nova Despesa
