@@ -1,92 +1,80 @@
-# 💼 Desafio Técnico Dev Fullstack
-Este é um desafio técnico para a vaga de Desenvolvedor Pleno. Seu objetivo é desenvolver uma aplicação movimentações financeiras, com autenticação de usuário, associação de categorias e persistência em banco de dados.
+# 💰 psa.finance - Desafio Técnico
 
-## 🧰 Requisitos Técnicos
-- Usar a estrutura inicial deste repositório (API utilizando NestJS e UI utilizando NextJS+Tailwind).
-- Login de usuário.
-- Cadastro de Usuários.
-- Cadastro de Movimentações.
-- Cadastro de Categorias
-- As movimentações devem ser associadas ao usuário autenticado.
+Uma aplicação completa (Fullstack) para gestão financeira pessoal. Permite aos usuários o controle de suas contas bancárias, categorização de despesas e receitas, e o acompanhamento do saldo em tempo real.
 
-## ✅ O que será avaliado?
+---
 
-- **📁 Organização do Código**  
-  Estrutura clara de pastas e arquivos, padronização e uso adequado de convenções do framework.
+## 🚀 Tecnologias Utilizadas
 
-- **🧹 Legibilidade e Clareza**  
-  Código limpo, bem nomeado e fácil de entender. Comentários úteis (quando necessário) e ausência de complexidade desnecessária.
+**Backend (`/api`)**
 
-- **🛠️ Boas Práticas de Desenvolvimento**  
-  Uso de princípios como DRY (Don't Repeat Yourself), SOLID, controle de erros, validações e segurança básica.
+- [NestJS](https://nestjs.com/) (Framework Node.js)
+- [Fastify](https://fastify.dev/) (Motor HTTP de alta performance)
+- [Prisma ORM](https://www.prisma.io/) (Modelagem de dados e Migrations)
+- [PostgreSQL](https://www.postgresql.org/) (Banco de Dados Relacional)
+- [Swagger / Scalar](https://scalar.com/) (Documentação interativa da API)
 
-- **💾 Persistência de Dados**  
-  Implementação correta de banco de dados, com relacionamentos adequados entre usuários, categorias e movimentações.  
-  **Dica:** Use um ORM 👀
+**Frontend (`/ui`)**
 
-- **📝 Documentação**  
-  README com orientações completas sobre instalação*, execução e stack utilizada.  
-  A API deve estar documentada com **Swagger**.
+- [Next.js](https://nextjs.org/) (React Framework)
+- [Tailwind CSS](https://tailwindcss.com/) (Estilização utilitária)
+- Integração via API REST
 
-> ⚠️ **Importante:** Projetos que **não rodarem seguindo as instruções do README** poderão **ser desconsiderados** na avaliação.
+---
 
+## ⚙️ Como executar o projeto
 
-## 🌟 Diferenciais
-Não são obrigatórios, mas serão considerados um **bônus** na sua avaliação:
+Pensando em facilitar a avaliação, o projeto foi totalmente containerizado. Você não precisa instalar Node.js ou configurar bancos de dados localmente.
 
-- 🧪 **Testes Automatizados**  
-  Cobertura de testes (unitários e/ou de integração).
+### Pré-requisitos
 
-- 📱 **Responsividade no Frontend**  
-  Interface adaptada para diferentes tamanhos de tela.
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados.
 
-- 🚀 **Deploy do Projeto**  
-  Aplicação hospedada (ex: Vercel, Netlify, Render, Railway, etc), com link acessível no README.
+### Passo a passo
 
-- 🛡️ **Tratamento de Erros e Validações**  
-  Respostas consistentes e mensagens claras de erro na API.
+1. Clone o repositório:
+   \`\`\`bash
+   git clone https://github.com/seu-usuario/desafio-dev.git
+   cd desafio-dev
+   \`\`\`
 
-- 🧩 **Arquitetura Escalável**  
-  Separação por camadas (ex: controllers, services, repositories), facilitando manutenção e evolução do projeto.
+2. Suba toda a infraestrutura (Banco de Dados, Backend e Frontend) com um único comando:
+   \`\`\`bash
+   docker-compose up -d --build
+   \`\`\`
 
-- 🗂️ **Documentação Extra**  
-  Diagramas, fluxos ou qualquer outro material que ajude a entender a arquitetura ou decisões técnicas.
+3. Acesse a aplicação:
+   - **Frontend (UI):** [http://localhost:3000](http://localhost:3000)
+   - **Documentação da API:** [http://localhost:3001/docs](http://localhost:3001/docs)
 
-## 📁 Estrutura do Projeto
+> **Nota:** As migrações do banco de dados são executadas automaticamente durante a inicialização do container da API.
 
-O projeto está dividido em duas aplicações separadas:
-```text
-📦 projeto-raiz/
-├── 📁 api/                      # Backend (NestJS)
-│   ├── 📁 node_modules/
-│   ├── 📁 src/                  # Código-fonte da API
-│   ├── 📁 test/                 # Testes automatizados
-│   ├── ...
-│
-├── 📁 ui/                       # Frontend (Next.js)
-│   ├── 📁 node_modules/
-│   ├── 📁 public/               # Arquivos estáticos
-│   ├── 📁 src/
-│   │   └── 📁 app/              # Código-fonte do frontend
-│   ├── ...
-```
+---
 
-## 🗄️ Banco de Dados
-Se sua aplicação utilizar **banco de dados relacional** (como PostgreSQL, MySQL, etc), é **obrigatório** fornecer um dos seguintes:
+## 📖 Documentação da API
 
-- Script SQL para criação das tabelas e estruturas necessárias  
-  **ou**
-- Migrations configuradas e executáveis via ORM.
+A documentação completa dos endpoints, regras de negócio e payloads (DTOs) foi construída utilizando o Scalar (uma interface mais moderna para o padrão OpenAPI/Swagger).
 
-> ⚠️ **Importante:** Sem essas informações, **não será possível rodar a aplicação**, e ela poderá ser **desconsiderada** na avaliação.
+Para testar a API diretamente pela documentação:
 
-## ⏱️ Prazo de entrega sugerido:
-3 a 5 dias corridos. Qualidade importa mais do que velocidade.
+1. Acesse `http://localhost:3001/docs`.
+2. Utilize o endpoint `POST /auth/signup` para criar um usuário.
+3. Utilize o endpoint `POST /auth/signin` para obter o Token JWT.
+4. Clique no botão de **Autenticação** no painel e insira o Token para desbloquear as rotas privadas.
 
-## 🚀 Como Enviar sua Solução
-- 🔀 Faça um Fork deste repositório para a sua conta no GitHub.
-- 🧑🏽‍💻 Implemente a sua solução no repositório forkado.
-- 🌐 Certifique-se de que o repositório esteja público.
-- 📩 Envie o link do seu repositório para o e-mail:
-  - ti@profissionaissa.com
-  - Com cópia para: jonata.martins@profissionaissa.com
+---
+
+## 🏛️ Estrutura do Projeto e Decisões Arquiteturais
+
+O projeto adota princípios de separação de responsabilidades e injeção de dependências para garantir uma base de código escalável e testável.
+
+- **`/api/src/modules`**: Divisão por domínio (Auth, Users, BankAccounts, Categories, Transactions).
+- **`/api/src/shared`**: Decorators, providers e lógicas compartilhadas globalmente.
+- **Validação**: Uso intensivo de `class-validator` e `class-transformer` nos DTOs para blindar a aplicação de entradas inválidas.
+- **Respostas HTTP**: Padronização dos retornos e dos HTTP Status Codes (200, 201, 204, 400, 401, 404, 409).
+
+---
+
+## 👨‍💻 Desenvolvido por
+
+Luciano Guimarães Moraes Junior
