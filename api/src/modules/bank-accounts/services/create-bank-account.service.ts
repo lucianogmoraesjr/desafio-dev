@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { UserRepository } from '@/modules/users/repositories/user.repository';
 
+import { CreateBankAccountResponseDto } from '../dtos/create-bank-account-response.dto';
 import { CreateBankAccountDto } from '../dtos/create-bank-account.dto';
 import { BankAccount } from '../entities/bank-account.entity';
 import { BankAccountRepository } from '../repositories/bank-account.repository';
@@ -10,9 +11,7 @@ type Input = CreateBankAccountDto & {
   userId: string;
 };
 
-type Output = {
-  id: string;
-};
+type Output = CreateBankAccountResponseDto;
 
 @Injectable()
 export class CreateBankAccountService {

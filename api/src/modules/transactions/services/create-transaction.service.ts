@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { BankAccountRepository } from '@/modules/bank-accounts/repositories/bank-account.repository';
 import { CategoryRepository } from '@/modules/categories/repositories/category.repository';
 
+import { CreateTransactionResponseDto } from '../dtos/create-transaction-response.dto';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
 import { Transaction } from '../entities/transaction.entity';
 import { TransactionRepository } from '../repositories/transaction.repository';
@@ -11,9 +12,7 @@ type Input = CreateTransactionDto & {
   userId: string;
 };
 
-type Output = {
-  id: string;
-};
+type Output = CreateTransactionResponseDto;
 
 @Injectable()
 export class CreateTransactionService {

@@ -2,23 +2,16 @@ import { Injectable } from '@nestjs/common';
 
 import { TransactionType } from '@/modules/transactions/entities/transaction.entity';
 
-import { BankAccountType } from '../entities/bank-account.entity';
+import { BankAccountDto } from '../dtos/bank-account.dto';
 import { BankAccountRepository } from '../repositories/bank-account.repository';
 
-type Output = {
-  id: string;
-  name: string;
-  type: BankAccountType;
-  color: string;
-  createdAt: Date;
-  currentBalanceInCents: number;
-};
+type Output = BankAccountDto[];
 
 @Injectable()
 export class ListBankAccountsService {
   constructor(private readonly bankAccountRepository: BankAccountRepository) {}
 
-  async execute(userId: string): Promise<Output[]> {
+  async execute(userId: string): Promise<Output> {
     const bankAccounts =
       await this.bankAccountRepository.findManyByUser(userId);
 
