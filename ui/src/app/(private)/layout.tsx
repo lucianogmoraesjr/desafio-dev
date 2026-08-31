@@ -36,7 +36,7 @@ export default async function PrivateLayout({
           <AvatarDropdown initials={getInitials(user?.name ?? "")} />
         </header>
 
-        <main className="flex max-h-full flex-1 flex-col gap-4 lg:flex-row">
+        <main className="flex max-h-11/12 flex-1 flex-col gap-4 lg:flex-row">
           {children}
         </main>
       </div>
