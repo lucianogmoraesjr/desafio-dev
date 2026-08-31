@@ -1,5 +1,5 @@
 import "server-only";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 type ApiClientOptions = Omit<RequestInit, "body"> & {
@@ -20,7 +20,18 @@ async function fetchClient<T>(
   options: RequestInit,
 ): Promise<T> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  const response = await fetch(`${baseUrl}${endpoint}`, options);
+
+  const reqHeaders = new Headers(options.headers);
+  const incomingHeaders = await headers();
+  const forwardedFor = incomingHeaders.get("x-forwarded-for");
+  if (forwardedFor) reqHeaders.set("x-forwarded-for", forwardedFor);
+
+  const finalOptions: RequestInit = {
+    ...options,
+    headers: reqHeaders,
+  };
+
+  const response = await fetch(`${baseUrl}${endpoint}`, finalOptions);
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
