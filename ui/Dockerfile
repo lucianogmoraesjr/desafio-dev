@@ -1,21 +1,15 @@
-FROM node:24-alpine AS builder
-
+FROM node:24-alpine AS deps
 WORKDIR /app
-
 COPY package*.json ./
-
 RUN npm ci
 
+FROM deps AS builder
 COPY . .
-
 ENV NEXT_TELEMETRY_DISABLED=1
-
 RUN npm run build
 
-FROM node:24-alpine
-
+FROM node:24-alpine AS production
 WORKDIR /app
-
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
