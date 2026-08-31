@@ -20,6 +20,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+      target: builder
     container_name: psa_finance_api
     restart: unless-stopped
     ports:
@@ -27,21 +28,32 @@ services:
     environment:
       - "DATABASE_URL=postgresql://root:root@db:5432/psa_finance?schema=public"
       - "JWT_SECRET=super_secret_jwt_key_change_me"
+      - "FRONTEND_URL=http://ui:3000"
       - "PORT=3001"
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./api:/app:z
+      - /app/node_modules
+    command: >
+      sh -c "npx prisma migrate deploy &&
+            npx prisma db seed &&
+            npm run start:dev"
 
   ui:
     build:
       context: ./ui
-      dockerfile: Dockerfile
-    container_name: psa_finance_ui
-    restart: unless-stopped
+      target: deps
     ports:
       - "3000:3000"
     environment:
-      - "NEXT_PUBLIC_API_URL=http://api:3001"
+      - NEXT_PUBLIC_API_URL=http://api:3001
+    volumes:
+      - ./ui:/app:z
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
     depends_on:
       - api
 
